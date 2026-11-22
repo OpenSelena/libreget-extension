@@ -1,0 +1,32 @@
+{
+  "name": "libreget-extension",
+  "version": "0.4.5",
+  "description": "Official browser companion extension for LibreGet (Chrome, Edge, Firefox, Brave)",
+  "type": "module",
+  "scripts": {
+    "test": "node --test chrome/tests/*.test.mjs",
+    "sync": "node sync.mjs",
+    "build:chrome": "cd chrome && zip -FS -r ../dist/libreget-chrome-extension.zip . -x '*.git*' 'tests/*'",
+    "build:firefox": "cd firefox && zip -FS -r ../dist/libreget-firefox-extension.zip . -x '*.git*'",
+    "build": "mkdir -p dist && npm run build:chrome && npm run build:firefox"
+  },
+  "keywords": [
+    "libreget",
+    "extension",
+    "browser-extension",
+    "downloader",
+    "hls",
+    "m3u8",
+    "dash"
+  ],
+  "author": "OpenSelena",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenSelena/libreget-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenSelena/libreget-extension/issues"
+  },
+  "homepage": "https://github.com/OpenSelena/libreget-extension#readme"
+}

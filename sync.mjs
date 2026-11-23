@@ -43,6 +43,7 @@ const SHARED = [
   "src/sniffer-toggle.js",
   "src/synthetic-manifest.js",
   "src/track-pairing.js",
+  "src/xiaohongshu.js",
   "popup/popup.js",
   "popup/popup.css",
   "popup/popup.html",

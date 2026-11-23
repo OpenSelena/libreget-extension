@@ -1,5 +1,6 @@
 import { extractCookiesForPlatform } from "./cookies.js";
 import { detectSupportedMediaUrl } from "./detect.js";
+import { captureXiaohongshuVideo, xiaohongshuNoteId } from "./xiaohongshu.js";
 import { createActionFeedbackController } from "./action-feedback.js";
 import { registerSnifferListeners, getMediaCount, getMediaCountForPage, getDetectedMedia, getDetectedMediaForUrl, getPageKeyForTab, recordDetectedMedia, restoreMedia } from "./media-sniffer.js";
 import { summarizeCookies } from "./cookie-summary.js";
@@ -391,23 +392,33 @@ function updateBadge(tabId) {
 }
 
 async function handleSendToApp(msg) {
-  const url = msg.url;
   const platform = msg.platform || "generic";
 
+  let activeTabId;
   let pageTitle = "";
   let pageThumbnail = "";
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    activeTabId = tab?.id;
     pageTitle = tab?.title || "";
     pageThumbnail = tab?.favIconUrl || "";
   } catch {}
 
+  const noteId = xiaohongshuNoteId(msg.url);
+  const capture = await captureXiaohongshuVideo(
+    msg.tabId ?? activeTabId,
+    noteId,
+    (options) => chrome.scripting.executeScript(options),
+  );
+  const url = capture?.url ?? msg.url;
+  const referer = capture ? "https://www.xiaohongshu.com/" : msg.referer;
+
   let cookies = null;
   try {
-    const platformCookies = await extractCookiesForPlatform(platform);
+    const platformCookies = noteId ? null : await extractCookiesForPlatform(platform);
     if (platformCookies && platformCookies.length > 0) {
       cookies = platformCookies;
-    } else {
+    } else if (!noteId) {
       const cookieMap = new Map();
 
       const cdnCookies = await chrome.cookies.getAll({ url });
@@ -442,12 +453,13 @@ async function handleSendToApp(msg) {
 
   const message = { type: "enqueue", url, protocolVersion: PROTOCOL_VERSION };
   if (cookies) message.cookies = cookies;
-  if (msg.referer) message.referer = msg.referer;
+  if (referer) message.referer = referer;
   if (msg.title) message.title = msg.title;
   else if (pageTitle) message.title = pageTitle;
   if (msg.thumbnail) message.thumbnail = msg.thumbnail;
   else if (pageThumbnail) message.thumbnail = pageThumbnail;
-  if (msg.mediaType) message.mediaType = msg.mediaType;
+  if (capture) message.mediaType = "video";
+  else if (msg.mediaType) message.mediaType = msg.mediaType;
   if (msg.hasManifest) {
     let tabId = msg.tabId;
     if (typeof tabId !== "number") {
@@ -467,17 +479,18 @@ async function handleSendToApp(msg) {
       return { ok: false, reason: "manifest_gone" };
     }
   }
-  if (msg.contentType) message.contentType = msg.contentType;
+  if (capture) message.contentType = "video/mp4";
+  else if (msg.contentType) message.contentType = msg.contentType;
   if (msg.headers) message.headers = msg.headers;
   if (typeof msg.openApp === "boolean") message.openApp = msg.openApp;
-  message.pageUrl = msg.referer || "";
+  message.pageUrl = referer || "";
   message.userAgent = navigator.userAgent;
 
   try {
     await chrome.storage.local.set({
       last_download_metadata: {
         url,
-        referer: msg.referer || "",
+        referer: referer || "",
         headers: msg.headers || {},
         cookies: cookies || [],
         userAgent: navigator.userAgent,

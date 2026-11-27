@@ -13,7 +13,8 @@
 
 <p align="center">
   <a href="https://github.com/OpenSelena/libreget-extension/releases/latest"><img src="https://img.shields.io/github/v/release/OpenSelena/libreget-extension?style=for-the-badge&label=release&color=F28500" alt="Release" /></a>
-  <a href="https://addons.mozilla.org/en-US/firefox/addon/libreget/"><img src="https://img.shields.io/badge/Firefox-AMO-FF7139?style=for-the-badge&logo=firefox-browser&logoColor=white" alt="Firefox AMO" /></a>
+  <a href="https://microsoftedge.microsoft.com/addons/detail/idgicdkhanahmhplpeamffngojdjjgdm"><img src="assets/badge-edge.svg" alt="Microsoft Edge Add-ons" /></a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/libreget/"><img src="assets/badge-firefox.svg" alt="Firefox AMO" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-2AA845?style=for-the-badge" alt="License GPL-3.0" /></a>
 </p>
 
@@ -23,13 +24,17 @@
 
 ## Installation
 
+### Microsoft Edge
+<img src="assets/icon-edge.svg" width="18" height="18" align="absmiddle" alt="Microsoft Edge" /> Install directly from the official Microsoft Edge Add-ons store:
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/idgicdkhanahmhplpeamffngojdjjgdm)
+
 ### Firefox
-Install from the official Mozilla Add-ons directory:
+<img src="assets/icon-firefox.svg" width="18" height="18" align="absmiddle" alt="Firefox" /> Install directly from the official Mozilla Add-ons directory:
 - [Firefox Add-ons (AMO)](https://addons.mozilla.org/en-US/firefox/addon/libreget/)
 
-### Chrome, Brave, Edge, Opera
+### Chrome, Brave, Opera
 1. Download `libreget-chrome-extension.zip` from [Releases](https://github.com/OpenSelena/libreget-extension/releases/latest) and extract it.
-2. Open `chrome://extensions` (or `edge://extensions`).
+2. Open `chrome://extensions` (or your Chromium browser's extensions page).
 3. Turn on **Developer mode** (top-right corner).
 4. Click **Load unpacked** and select the extracted folder.
 

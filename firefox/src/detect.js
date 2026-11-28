@@ -1,3 +1,5 @@
+import { xiaohongshuNoteId } from "./xiaohongshu.js";
+
 const MEDIA_CONTENT_TYPES = new Set([
   "audio",
   "clip",
@@ -57,6 +59,7 @@ function detectPlatform(url) {
   if (matchesHost(host, "vimeo.com")) return "vimeo";
   if (matchesHost(host, "udemy.com")) return "udemy";
   if (matchesHost(host, "bilibili.com") || host === "b23.tv") return "bilibili";
+  if (xiaohongshuNoteId(url.href)) return "xiaohongshu";
   if (host === "docs.google.com") return "gdocs";
 
   return null;
@@ -91,6 +94,8 @@ function detectContentType(platform, url) {
       return parseUdemy(segments);
     case "bilibili":
       return parseBilibili(segments);
+    case "xiaohongshu":
+      return "post";
     case "gdocs":
       return parseGdocs(segments);
     default:
